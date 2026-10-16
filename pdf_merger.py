@@ -1,17 +1,19 @@
 from pypdf import PdfWriter
 
 class PdfMerger:
-    def __init__(pdf_list: str, merged_name: list):
+    def __init__(self, pdf_list: list, merged_name: str):
         self.merger = PdfWriter()
         self.pdf_list = pdf_list
-        self.merged_name = merged_name
+        self.merged_name = merged_name if merged_name.endswith(".pdf") else f"{merged_name}.pdf"
 
     def process(self):
-        for pdf in pdf_list:
-            self.merger.append(pdf)
+        for pdf in self.pdf_list:
+            filename = pdf if pdf.endswith(".pdf") else f"{pdf}.pdf"
+            # Set import_outline=False to bypass the IndirectObject TypeError
+            self.merger.append(filename, import_outline=False)
 
-        with open(merged_name, "wb") as output:
+        with open(self.merged_name, "wb") as output:
             self.merger.write(output)
 
-        #free memory
+        # free memory
         self.merger.close()
