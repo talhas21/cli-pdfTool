@@ -1,3 +1,4 @@
+import os
 from pypdf import PdfWriter
 
 class PdfMerger:
@@ -9,6 +10,10 @@ class PdfMerger:
     def process(self):
         for pdf in self.pdf_list:
             filename = pdf if pdf.endswith(".pdf") else f"{pdf}.pdf"
+            
+            if not os.path.exists(filename):
+                raise FileNotFoundError(f"Could not find file: {filename}")
+            
             # Set import_outline=False to bypass the IndirectObject TypeError
             self.merger.append(filename, import_outline=False)
 
